@@ -1,0 +1,12 @@
+{
+  "name": "ywj-cli",
+  "version": "1.0.0",
+  "description": "脚手架",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "yewenjun",
+  "license": "ISC",
+  "dependencies": {}
+}
