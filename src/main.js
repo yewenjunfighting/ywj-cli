@@ -35,7 +35,6 @@ import chalk from 'chalk'; // 使得输出高亮的库
      .description(actionMap[action].description)
      .alias(actionMap[action].alias) // 别名
      .action(() => {
-        //  console.log(`process: ${process.argv}`);
          switch(action) { // 为每一种命令添加动作
             case 'config':
                  // 配置

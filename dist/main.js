@@ -1,5 +1,9 @@
 'use strict';
 
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
 var _commander = require('commander');
 
 var _commander2 = _interopRequireDefault(_commander);
@@ -25,7 +29,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 
 // VERSION是从package.json中读取的
-let actionMap = {
+var actionMap = {
     init: {
         description: 'generate a new project from a template',
         usages: ['ywj init templateName projectName']
@@ -41,17 +45,16 @@ let actionMap = {
 
     // 添加 init / config 命令
 }; // 命令行工具库
-Object.keys(actionMap).forEach(action => {
+Object.keys(actionMap).forEach(function (action) {
     _commander2.default.command(action).description(actionMap[action].description).alias(actionMap[action].alias) // 别名
-    .action(() => {
-        console.log(`process: ${process}`);
+    .action(function () {
         switch (action) {// 为每一种命令添加动作
             case 'config':
                 // 配置
-                (0, _index2.default)(action, ...process.argv.slice(3)); // ywj config get/set k v
+                _index2.default.apply(undefined, [action].concat((0, _toConsumableArray3.default)(process.argv.slice(3)))); // ywj config get/set k v
                 break;
             case 'init':
-                (0, _index2.default)(action, ...process.argv.slice(3));
+                _index2.default.apply(undefined, [action].concat((0, _toConsumableArray3.default)(process.argv.slice(3))));
             default:
                 break;
         }
@@ -61,8 +64,8 @@ Object.keys(actionMap).forEach(action => {
 function help() {
     // \r 移到行首, \n换下一行
     console.log('\r\nUsage:');
-    Object.keys(actionMap).forEach(action => {
-        actionMap[action].usages.forEach(usage => {
+    Object.keys(actionMap).forEach(function (action) {
+        actionMap[action].usages.forEach(function (usage) {
             // 打印出每个命令的使用方法
             console.log('  - ' + usage);
         });

@@ -28,11 +28,12 @@ let init = async(templateName, projectName) => {
             // 显示正在加载的效果
             let loading = ora('downloading template ...');
             loading.start();
-            console.log(templateName, projectName);
+            // console.log(templateName, projectName);
             downloadLocal(templateName, projectName).then(() => {
                 // 模板下载成功
                 loading.succeed();
                 const fileName = `${projectName}/package.json`;
+                console.log(`fileName: ${fileName}`);
                 if(fs.existsSync(fileName)) {
                     // 读取package.json文件,并设置它的name, author, description字段
                     const data = fs.readFileSync(fileName).toString();
