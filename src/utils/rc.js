@@ -27,6 +27,8 @@ export const get = async(key) => {
 
 export const getAll = async() => {
     const exit = await exits(RC);
+    // RC: C:\Users\17289/.ywjrc; exit: false
+    console.log(`RC: ${RC}; exit: ${exit}`);
     let opts;
     if(exit) {
         opts = await readFile(RC, 'utf8');

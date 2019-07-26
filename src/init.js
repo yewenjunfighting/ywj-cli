@@ -47,6 +47,8 @@ let init = async(templateName, projectName) => {
                     // 读取,写入用户输入的数据, 覆盖原来的package.json文件
                     fs.writeFileSync(fileName, JSON.stringify(json, null, '\t'), 'utf-8');
                     console.log(symbol.success, chalk.green('Project initialization finished!'));
+                }else {
+                    console.log('该项目没有package.json文件');
                 }
             }).catch(() => {
                 loading.fail()

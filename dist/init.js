@@ -85,6 +85,8 @@ var init = function () {
                                                             // 读取,写入用户输入的数据, 覆盖原来的package.json文件
                                                             _fs2.default.writeFileSync(fileName, JSON.stringify(json, null, '\t'), 'utf-8');
                                                             console.log(_logSymbols2.default.success, _chalk2.default.green('Project initialization finished!'));
+                                                        } else {
+                                                            console.log('该项目没有package.json文件');
                                                         }
                                                     }).catch(function () {
                                                         loading.fail();

@@ -5,7 +5,7 @@ export const VERSION = version;
 
 // 用户的根目录
 const HOME = process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME'];
-
+console.log(`home:${HOME}`);
 // 配置文件目录
 export const RC = `${HOME}/.ywjrc`;
 

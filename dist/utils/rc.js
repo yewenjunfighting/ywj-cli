@@ -100,26 +100,29 @@ var getAll = exports.getAll = function () {
 
                     case 2:
                         exit = _context2.sent;
+
+                        // RC: C:\Users\17289/.ywjrc; exit: false
+                        console.log('RC: ' + _constants.RC + '; exit: ' + exit);
                         opts = void 0;
 
                         if (!exit) {
-                            _context2.next = 10;
+                            _context2.next = 11;
                             break;
                         }
 
-                        _context2.next = 7;
+                        _context2.next = 8;
                         return readFile(_constants.RC, 'utf8');
 
-                    case 7:
+                    case 8:
                         opts = _context2.sent;
 
                         opts = (0, _ini.decode)(opts);
                         return _context2.abrupt('return', opts);
 
-                    case 10:
+                    case 11:
                         return _context2.abrupt('return', {});
 
-                    case 11:
+                    case 12:
                     case 'end':
                         return _context2.stop();
                 }

@@ -30,14 +30,18 @@ var downloadLocal = exports.downloadLocal = function () {
             while (1) {
                 switch (_context.prev = _context.next) {
                     case 0:
-                        _context.next = 2;
+                        console.log('templateName: ' + templateName + '; projectName: ' + projectName);
+                        _context.next = 3;
                         return (0, _rc.getAll)();
 
-                    case 2:
+                    case 3:
                         config = _context.sent;
-                        api = config.registry + '/' + templateName;
+
+                        // config => {}
+                        // let api = `${config.registry}/${templateName}`;
+                        api = 'github:yewenjunfighting/hello_world';
                         return _context.abrupt('return', new Promise(function (reslove, reject) {
-                            //
+                            console.log('api: ' + api);
                             (0, _downloadGitRepo2.default)(api, projectName, function (err) {
                                 if (err) {
                                     reject(err);
@@ -46,7 +50,7 @@ var downloadLocal = exports.downloadLocal = function () {
                             });
                         }));
 
-                    case 5:
+                    case 6:
                     case 'end':
                         return _context.stop();
                 }
