@@ -6,7 +6,8 @@ export const downloadLocal = async(templateName, projectName) => {
     let config = await getAll();
     // config => {}
     // let api = `${config.registry}/${templateName}`;
-    let api = `github:yewenjunfighting/hello_world`;
+    // 这里我把项目模板硬编码了, 这里后续要改的
+    let api = `github:yewenjunfighting/hello_world`; 
     return new Promise((reslove, reject) => {
         console.log(`api: ${api}`);
         download(api, projectName, (err) => {
