@@ -5,7 +5,7 @@ export const VERSION = version;
 
 // 用户的根目录
 const HOME = process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME'];
-console.log(`home:${HOME}`);
+// console.log(`home:${HOME}`);
 // 配置文件目录
 export const RC = `${HOME}/.ywjrc`;
 
@@ -14,7 +14,22 @@ export const RC = `${HOME}/.ywjrc`;
 // https://github.com/yewenjunfighting/ywj-cli
 // https://api.github.com/${type}/${registry}/repos
 // 模板下载地址可配置
-export const DEFAULTS = {
-    registry: 'yewenjunfighting',
-    type: 'users'
-}
+
+export const TEMPLATE = [
+        {
+            user: 'liwudi',
+            projectName: 'VueProject',
+        },
+        {
+            user: 'lpz1096',
+            projectName: 'vueProMobileTemplate',
+        },
+        {
+            user: 'lidaguang1989',
+            projectName: 'react-seed',
+        },
+        {
+            user: 'slashhuang',
+            projectName: 'react-mobile-template',
+        },
+]

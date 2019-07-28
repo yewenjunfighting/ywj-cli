@@ -1,5 +1,5 @@
 // ywjrc文件的增删改查
-import { RC, DEFAULTS } from './constants';
+import { RC } from './constants';
 import { decode, encode } from 'ini';
 import { promisify } from 'util'; // util是node的一个模块
 import chalk from 'chalk';
@@ -28,7 +28,7 @@ export const get = async(key) => {
 export const getAll = async() => {
     const exit = await exits(RC);
     // RC: C:\Users\17289/.ywjrc; exit: false
-    console.log(`RC: ${RC}; exit: ${exit}`);
+    // console.log(`RC: ${RC}; exit: ${exit}`);
     let opts;
     if(exit) {
         opts = await readFile(RC, 'utf8');

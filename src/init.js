@@ -9,38 +9,46 @@ import fs from 'fs';
 import chalk from 'chalk';
 import symbol from 'log-symbols'; // Colored symbols for various log levels
 
-let init = async(templateName, projectName) => {
+// 借用inquirer-select-line插件写list
+inquirer.registerPrompt('selectLine', require('inquirer-select-line'));
+
+let init = async(projectName) => {
     // 如果当前目录下没有同名的项目
     if(!fs.existsSync(projectName)) {
         // 命令行交互
         inquirer.prompt([
             {
-                name: 'description',
-                message: 'Please enter the project description: '
-            },
-            {
-                name: 'author',
-                message: 'Please enter the author name: '
+                type: 'selectLine',
+                name: 'kind',
+                message: 'select template',
+                choices: [
+                    'vue-web',
+                    'react-web',
+                    'vue-mobile',
+                    'react-mobile',
+                ]
             }
         ]).then(async (answer) => {
             // 下载模板, 选择模板
             // 通过配置文件, 获取模板信息
             // 显示正在加载的效果
+            // console.log(answer);
             let loading = ora('downloading template ...');
             loading.start();
             // console.log(templateName, projectName);
-            downloadLocal(templateName, projectName).then(() => {
+            // 如果用户没有输入项目名字的话 ,就采用默认的名称
+            downloadLocal(answer, projectName = 'myProject').then(() => {
                 // 模板下载成功
                 loading.succeed();
                 const fileName = `${projectName}/package.json`;
-                console.log(`fileName: ${fileName}`);
+                // console.log(`fileName: ${fileName}`);
                 if(fs.existsSync(fileName)) {
                     // 读取package.json文件,并设置它的name, author, description字段
                     const data = fs.readFileSync(fileName).toString();
                     let json = JSON.parse(data);
                     json.name = projectName;
-                    json.author = answer.author;
-                    json.description = answer.description;
+                    //json.author = answer.author;
+                    //json.description = answer.description;
                     // 修改项目文件夹中的package.json文件
                     // 为了package.json文件的可读性,字符串化的时候写入了\t
                     // 上面的操作就是: 当模板下载完了,读取项目根目录下的package.json
@@ -50,8 +58,9 @@ let init = async(templateName, projectName) => {
                 }else {
                     console.log('该项目没有package.json文件');
                 }
-            }).catch(() => {
-                loading.fail()
+            }).catch((err) => {
+                console.log(err);
+                loading.fail();
             })
         });
     }else {

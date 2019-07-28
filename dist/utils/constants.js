@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.DEFAULTS = exports.RC = exports.VERSION = undefined;
+exports.TEMPLATE = exports.RC = exports.VERSION = undefined;
 
 var _package = require('../../package.json');
 
@@ -12,7 +12,7 @@ var VERSION = exports.VERSION = _package.version;
 
 // 用户的根目录
 var HOME = process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME'];
-console.log('home:' + HOME);
+// console.log(`home:${HOME}`);
 // 配置文件目录
 var RC = exports.RC = HOME + '/.ywjrc';
 
@@ -21,7 +21,17 @@ var RC = exports.RC = HOME + '/.ywjrc';
 // https://github.com/yewenjunfighting/ywj-cli
 // https://api.github.com/${type}/${registry}/repos
 // 模板下载地址可配置
-var DEFAULTS = exports.DEFAULTS = {
-    registry: 'yewenjunfighting',
-    type: 'users'
-};
+
+var TEMPLATE = exports.TEMPLATE = [{
+    user: 'liwudi',
+    projectName: 'VueProject'
+}, {
+    user: 'lpz1096',
+    projectName: 'vueProMobileTemplate'
+}, {
+    user: 'lidaguang1989',
+    projectName: 'react-seed'
+}, {
+    user: 'slashhuang',
+    projectName: 'react-mobile-template'
+}];

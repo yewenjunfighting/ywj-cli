@@ -34,12 +34,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // Colored symbols for various log levels
 
+// 借用inquirer-select-line插件写list
 // init命令
 // 当用户执行init命令后, 向用户提出问题
 // 接收用户的输入并进行相应的处理
 // 命令格式 ywj init template-name project-name
+_inquirer2.default.registerPrompt('selectLine', require('inquirer-select-line')); // 引入下载模板的函数
+
+
 var init = function () {
-    var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(templateName, projectName) {
+    var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(projectName) {
         return _regenerator2.default.wrap(function _callee2$(_context2) {
             while (1) {
                 switch (_context2.prev = _context2.next) {
@@ -48,11 +52,10 @@ var init = function () {
                         if (!_fs2.default.existsSync(projectName)) {
                             // 命令行交互
                             _inquirer2.default.prompt([{
-                                name: 'description',
-                                message: 'Please enter the project description: '
-                            }, {
-                                name: 'author',
-                                message: 'Please enter the author name: '
+                                type: 'selectLine',
+                                name: 'kind',
+                                message: 'select template',
+                                choices: ['vue-web', 'react-web', 'vue-mobile', 'react-mobile']
                             }]).then(function () {
                                 var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(answer) {
                                     var loading;
@@ -63,22 +66,24 @@ var init = function () {
                                                     // 下载模板, 选择模板
                                                     // 通过配置文件, 获取模板信息
                                                     // 显示正在加载的效果
+                                                    // console.log(answer);
                                                     loading = (0, _ora2.default)('downloading template ...');
 
                                                     loading.start();
                                                     // console.log(templateName, projectName);
-                                                    (0, _get.downloadLocal)(templateName, projectName).then(function () {
+                                                    // 如果用户没有输入项目名字的话 ,就采用默认的名称
+                                                    (0, _get.downloadLocal)(answer, projectName = 'myProject').then(function () {
                                                         // 模板下载成功
                                                         loading.succeed();
                                                         var fileName = projectName + '/package.json';
-                                                        console.log('fileName: ' + fileName);
+                                                        // console.log(`fileName: ${fileName}`);
                                                         if (_fs2.default.existsSync(fileName)) {
                                                             // 读取package.json文件,并设置它的name, author, description字段
                                                             var data = _fs2.default.readFileSync(fileName).toString();
                                                             var json = JSON.parse(data);
                                                             json.name = projectName;
-                                                            json.author = answer.author;
-                                                            json.description = answer.description;
+                                                            //json.author = answer.author;
+                                                            //json.description = answer.description;
                                                             // 修改项目文件夹中的package.json文件
                                                             // 为了package.json文件的可读性,字符串化的时候写入了\t
                                                             // 上面的操作就是: 当模板下载完了,读取项目根目录下的package.json
@@ -88,7 +93,8 @@ var init = function () {
                                                         } else {
                                                             console.log('该项目没有package.json文件');
                                                         }
-                                                    }).catch(function () {
+                                                    }).catch(function (err) {
+                                                        console.log(err);
                                                         loading.fail();
                                                     });
 
@@ -100,7 +106,7 @@ var init = function () {
                                     }, _callee, undefined);
                                 }));
 
-                                return function (_x3) {
+                                return function (_x2) {
                                     return _ref2.apply(this, arguments);
                                 };
                             }());
@@ -117,10 +123,9 @@ var init = function () {
         }, _callee2, undefined);
     }));
 
-    return function init(_x, _x2) {
+    return function init(_x) {
         return _ref.apply(this, arguments);
     };
-}(); // 引入下载模板的函数
-
+}();
 
 module.exports = init;

@@ -19,29 +19,30 @@ var _downloadGitRepo = require('download-git-repo');
 
 var _downloadGitRepo2 = _interopRequireDefault(_downloadGitRepo);
 
+var _constants = require('./constants');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// 从Github,Gitlab下载远程仓库到本地
-
 var downloadLocal = exports.downloadLocal = function () {
-    var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(templateName, projectName) {
+    var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(template, projectName) {
         var config, api;
         return _regenerator2.default.wrap(function _callee$(_context) {
             while (1) {
                 switch (_context.prev = _context.next) {
                     case 0:
-                        console.log('templateName: ' + templateName + '; projectName: ' + projectName);
-                        _context.next = 3;
+                        _context.next = 2;
                         return (0, _rc.getAll)();
 
-                    case 3:
+                    case 2:
                         config = _context.sent;
 
                         // config => {}
                         // let api = `${config.registry}/${templateName}`;
-                        api = 'github:yewenjunfighting/hello_world';
+                        // 这里我把项目模板硬编码了, 这里后续要改的
+                        api = 'github:' + _constants.TEMPLATE[template.kind - 1].user + '/' + _constants.TEMPLATE[template.kind - 1].projectName;
                         return _context.abrupt('return', new Promise(function (reslove, reject) {
-                            console.log('api: ' + api);
+                            // console.log(`api: ${api}`);
+                            // download这个函数会帮我们重命名项目
                             (0, _downloadGitRepo2.default)(api, projectName, function (err) {
                                 if (err) {
                                     reject(err);
@@ -50,7 +51,7 @@ var downloadLocal = exports.downloadLocal = function () {
                             });
                         }));
 
-                    case 6:
+                    case 5:
                     case 'end':
                         return _context.stop();
                 }
@@ -61,4 +62,4 @@ var downloadLocal = exports.downloadLocal = function () {
     return function downloadLocal(_x, _x2) {
         return _ref.apply(this, arguments);
     };
-}();
+}(); // 从Github,Gitlab下载远程仓库到本地

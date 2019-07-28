@@ -102,27 +102,27 @@ var getAll = exports.getAll = function () {
                         exit = _context2.sent;
 
                         // RC: C:\Users\17289/.ywjrc; exit: false
-                        console.log('RC: ' + _constants.RC + '; exit: ' + exit);
+                        // console.log(`RC: ${RC}; exit: ${exit}`);
                         opts = void 0;
 
                         if (!exit) {
-                            _context2.next = 11;
+                            _context2.next = 10;
                             break;
                         }
 
-                        _context2.next = 8;
+                        _context2.next = 7;
                         return readFile(_constants.RC, 'utf8');
 
-                    case 8:
+                    case 7:
                         opts = _context2.sent;
 
                         opts = (0, _ini.decode)(opts);
                         return _context2.abrupt('return', opts);
 
-                    case 11:
+                    case 10:
                         return _context2.abrupt('return', {});
 
-                    case 12:
+                    case 11:
                     case 'end':
                         return _context2.stop();
                 }
@@ -185,7 +185,7 @@ var set = exports.set = function () {
                         break;
 
                     case 18:
-                        opts = Object.assign(_constants.DEFAULTS, (0, _defineProperty3.default)({}, key, value));
+                        opts = Object.assign(DEFAULTS, (0, _defineProperty3.default)({}, key, value));
 
                     case 19:
                         _context3.next = 21;
