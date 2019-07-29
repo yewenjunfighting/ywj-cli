@@ -8,7 +8,7 @@ export const downloadLocal = async(template, projectName) => {
     // config => {}
     // let api = `${config.registry}/${templateName}`;
     // 这里我把项目模板硬编码了, 这里后续要改的
-    let api = `github:${TEMPLATE[template.kind - 1].user}/${TEMPLATE[template.kind - 1].projectName}`; 
+    let api = `github:${TEMPLATE[template.kind].user}/${TEMPLATE[template.kind].projectName}`; 
     return new Promise((reslove, reject) => {
         // console.log(`api: ${api}`);
         // download这个函数会帮我们重命名项目

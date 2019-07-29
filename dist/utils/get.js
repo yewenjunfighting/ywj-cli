@@ -39,7 +39,7 @@ var downloadLocal = exports.downloadLocal = function () {
                         // config => {}
                         // let api = `${config.registry}/${templateName}`;
                         // 这里我把项目模板硬编码了, 这里后续要改的
-                        api = 'github:' + _constants.TEMPLATE[template.kind - 1].user + '/' + _constants.TEMPLATE[template.kind - 1].projectName;
+                        api = 'github:' + _constants.TEMPLATE[template.kind].user + '/' + _constants.TEMPLATE[template.kind].projectName;
                         return _context.abrupt('return', new Promise(function (reslove, reject) {
                             // console.log(`api: ${api}`);
                             // download这个函数会帮我们重命名项目

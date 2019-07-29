@@ -22,16 +22,21 @@ var RC = exports.RC = HOME + '/.ywjrc';
 // https://api.github.com/${type}/${registry}/repos
 // 模板下载地址可配置
 
-var TEMPLATE = exports.TEMPLATE = [{
-    user: 'liwudi',
-    projectName: 'VueProject'
-}, {
-    user: 'lpz1096',
-    projectName: 'vueProMobileTemplate'
-}, {
-    user: 'lidaguang1989',
-    projectName: 'react-seed'
-}, {
-    user: 'slashhuang',
-    projectName: 'react-mobile-template'
-}];
+var TEMPLATE = exports.TEMPLATE = {
+    'vue-web': {
+        user: 'liwudi',
+        projectName: 'VueProject'
+    },
+    'react-web': {
+        user: 'lpz1096',
+        projectName: 'vueProMobileTemplate'
+    },
+    'vue-mobile': {
+        user: 'lidaguang1989',
+        projectName: 'react-seed'
+    },
+    'react-mobile': {
+        user: 'slashhuang',
+        projectName: 'react-mobile-template'
+    }
+};

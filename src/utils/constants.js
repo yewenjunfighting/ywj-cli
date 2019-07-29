@@ -15,21 +15,21 @@ export const RC = `${HOME}/.ywjrc`;
 // https://api.github.com/${type}/${registry}/repos
 // 模板下载地址可配置
 
-export const TEMPLATE = [
-        {
+export const TEMPLATE = {
+        'vue-web': {
             user: 'liwudi',
             projectName: 'VueProject',
         },
-        {
+        'react-web': {
             user: 'lpz1096',
             projectName: 'vueProMobileTemplate',
         },
-        {
+        'vue-mobile': {
             user: 'lidaguang1989',
             projectName: 'react-seed',
         },
-        {
+        'react-mobile': {
             user: 'slashhuang',
             projectName: 'react-mobile-template',
         },
-]
+    }

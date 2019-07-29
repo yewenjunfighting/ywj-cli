@@ -49,6 +49,7 @@ Object.keys(actionMap).forEach(function (action) {
     _commander2.default.command(action).description(actionMap[action].description).alias(actionMap[action].alias) // 别名
     .action(function () {
         switch (action) {// 为每一种命令添加动作
+            // 标记的功能暂时没法用
             case 'config':
                 // 配置
                 _index2.default.apply(undefined, [action].concat((0, _toConsumableArray3.default)(process.argv.slice(3)))); // ywj config get/set k v

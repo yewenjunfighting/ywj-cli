@@ -36,6 +36,7 @@ import chalk from 'chalk'; // 使得输出高亮的库
      .alias(actionMap[action].alias) // 别名
      .action(() => {
          switch(action) { // 为每一种命令添加动作
+            // 标记的功能暂时没法用
             case 'config':
                  // 配置
                  apply(action, ...process.argv.slice(3)); // ywj config get/set k v
