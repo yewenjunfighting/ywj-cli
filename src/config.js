@@ -10,9 +10,7 @@ let config = async(action, key, value) => {
                 console.log(result);
             } else {
                 let obj = await getAll();
-                Object.keys(obj).forEach(key => {
-                    console.log(`${key}=${obj[key]}`);
-                })
+                console.log(obj);
             }
             break;
         case 'set':

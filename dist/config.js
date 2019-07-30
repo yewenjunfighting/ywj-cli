@@ -46,9 +46,7 @@ var config = function () {
                     case 12:
                         obj = _context.sent;
 
-                        Object.keys(obj).forEach(function (key) {
-                            console.log(key + '=' + obj[key]);
-                        });
+                        console.log(obj);
 
                     case 14:
                         return _context.abrupt('break', 20);

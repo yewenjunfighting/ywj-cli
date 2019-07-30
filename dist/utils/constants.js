@@ -11,11 +11,11 @@ var _package = require('../../package.json');
 var VERSION = exports.VERSION = _package.version;
 
 // 用户的根目录
-var HOME = process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME'];
+//const HOME = process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME'];
 // console.log(`home:${HOME}`);
 // 配置文件目录
-var RC = exports.RC = HOME + '/.ywjrc';
-
+//export const RC = `${HOME}/package.json`;
+var RC = exports.RC = 'package.json';
 // RC 配置下载模板的地方，给 github 的 api 使用
 // https://api.github.com/users/YvetteLau/repos
 // https://github.com/yewenjunfighting/ywj-cli

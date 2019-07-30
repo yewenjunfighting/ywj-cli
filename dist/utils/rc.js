@@ -46,7 +46,8 @@ var writeFile = (0, _util.promisify)(_fs2.default.writeFile);
 // DEFAULTS是默认配置
 var get = exports.get = function () {
     var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(key) {
-        var exit, opts;
+        var exit, opts, _opts;
+
         return _regenerator2.default.wrap(function _callee$(_context) {
             while (1) {
                 switch (_context.prev = _context.next) {
@@ -56,26 +57,29 @@ var get = exports.get = function () {
 
                     case 2:
                         exit = _context.sent;
-                        opts = void 0;
+
+                        // console.log(`exit: ${exit}`);
+                        opts = '';
 
                         if (!exit) {
-                            _context.next = 10;
+                            _context.next = 11;
                             break;
                         }
 
                         _context.next = 7;
-                        return readFile(_constants.RC, 'utf8');
+                        return ReadFile(_constants.RC);
 
                     case 7:
-                        opts = _context.sent;
-
-                        opts = (0, _ini.decode)(opts);
-                        return _context.abrupt('return', opts[key]);
-
-                    case 10:
-                        return _context.abrupt('return', '');
+                        _opts = _context.sent;
+                        return _context.abrupt('return', _opts[key]);
 
                     case 11:
+                        console.log(_chalk2.default.bold.red('该目录下没有package.json文件'));
+
+                    case 12:
+                        return _context.abrupt('return', opts);
+
+                    case 13:
                     case 'end':
                         return _context.stop();
                 }
@@ -106,7 +110,7 @@ var getAll = exports.getAll = function () {
                         opts = void 0;
 
                         if (!exit) {
-                            _context2.next = 10;
+                            _context2.next = 9;
                             break;
                         }
 
@@ -115,14 +119,12 @@ var getAll = exports.getAll = function () {
 
                     case 7:
                         opts = _context2.sent;
-
-                        opts = (0, _ini.decode)(opts);
                         return _context2.abrupt('return', opts);
 
-                    case 10:
+                    case 9:
                         return _context2.abrupt('return', {});
 
-                    case 11:
+                    case 10:
                     case 'end':
                         return _context2.stop();
                 }
@@ -160,7 +162,7 @@ var set = exports.set = function () {
                     case 7:
                         opts = _context3.sent;
 
-                        opts = (0, _ini.decode)(opts);
+                        opts = JSON.parse(opts);
 
                         if (key) {
                             _context3.next = 12;
@@ -189,7 +191,7 @@ var set = exports.set = function () {
 
                     case 19:
                         _context3.next = 21;
-                        return writeFile(_constants.RC, (0, _ini.encode)(opts), 'utf8');
+                        return writeFile(_constants.RC, JSON.stringify(opts, undefined, '\t'));
 
                     case 21:
                     case 'end':
@@ -212,30 +214,28 @@ var remove = exports.remove = function () {
                 switch (_context4.prev = _context4.next) {
                     case 0:
                         _context4.next = 2;
-                        return exists(_constants.RC);
+                        return exits(_constants.RC);
 
                     case 2:
                         exit = _context4.sent;
                         opts = void 0;
 
                         if (!exit) {
-                            _context4.next = 12;
+                            _context4.next = 11;
                             break;
                         }
 
                         _context4.next = 7;
-                        return readFile(_constants.RC, 'utf8');
+                        return ReadFile(_constants.RC);
 
                     case 7:
                         opts = _context4.sent;
 
-                        // 解码
-                        opts = (0, _ini.decode)(opts);
-                        delete opts[key];
-                        _context4.next = 12;
-                        return writeFile(_constants.RC, (0, _ini.encode)(opts), 'utf8');
+                        if (opts[key]) delete opts[key];else console.log(_chalk2.default.bold.red('package.json\u6587\u4EF6\u6CA1\u6709' + key + '\u5C5E\u6027'));
+                        _context4.next = 11;
+                        return writeFile(_constants.RC, JSON.stringify(opts, undefined, '\t'), 'utf8');
 
-                    case 12:
+                    case 11:
                     case 'end':
                         return _context4.stop();
                 }
@@ -247,3 +247,11 @@ var remove = exports.remove = function () {
         return _ref4.apply(this, arguments);
     };
 }();
+
+function ReadFile(file) {
+    return new Promise(function (res, rej) {
+        readFile(file, 'utf8', function (err, data) {
+            if (err) rej(new Error('读取文件出错'));else res(JSON.parse(data));
+        });
+    });
+}
