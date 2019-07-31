@@ -5,21 +5,19 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.remove = exports.set = exports.getAll = exports.get = undefined;
 
-var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
-
-var _defineProperty3 = _interopRequireDefault(_defineProperty2);
-
 var _regenerator = require('babel-runtime/regenerator');
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _typeof2 = require('babel-runtime/helpers/typeof');
+
+var _typeof3 = _interopRequireDefault(_typeof2);
 
 var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var _constants = require('./constants');
-
-var _ini = require('ini');
 
 var _util = require('util');
 
@@ -37,8 +35,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // promisify会在所有情况下假定original是一个最后的参数是回调函数的函数
 // 如果它不是,那么它返回的函数的返回值是undefined
 // util是node的一个模块
-var exits = (0, _util.promisify)(_fs2.default.exists); // ywjrc文件的增删改查
-
+// ywjrc文件的增删改查
+var exits = (0, _util.promisify)(_fs2.default.exists);
 var readFile = (0, _util.promisify)(_fs2.default.readFile);
 var writeFile = (0, _util.promisify)(_fs2.default.writeFile);
 
@@ -46,7 +44,7 @@ var writeFile = (0, _util.promisify)(_fs2.default.writeFile);
 // DEFAULTS是默认配置
 var get = exports.get = function () {
     var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(key) {
-        var exit, opts, _opts;
+        var exit, opts, _opts, res;
 
         return _regenerator2.default.wrap(function _callee$(_context) {
             while (1) {
@@ -62,7 +60,7 @@ var get = exports.get = function () {
                         opts = '';
 
                         if (!exit) {
-                            _context.next = 11;
+                            _context.next = 13;
                             break;
                         }
 
@@ -71,15 +69,23 @@ var get = exports.get = function () {
 
                     case 7:
                         _opts = _context.sent;
-                        return _context.abrupt('return', _opts[key]);
+                        res = researchJson('get', key, undefined)(_opts);
+                        // 如果是对象的话转化为字符序列后输出
 
-                    case 11:
-                        console.log(_chalk2.default.bold.red('该目录下没有package.json文件'));
-
-                    case 12:
-                        return _context.abrupt('return', opts);
+                        if ((typeof res === 'undefined' ? 'undefined' : (0, _typeof3.default)(res)) === 'object') res = JSON.stringify(res, undefined, '\t');
+                        // console.log(opts instanceof Error);
+                        console.log(_chalk2.default.bold.green(res));
+                        // 这个要该,写个遍历的算法
+                        _context.next = 14;
+                        break;
 
                     case 13:
+                        console.log(_chalk2.default.bold.red('该目录下没有package.json文件'));
+
+                    case 14:
+                        return _context.abrupt('return', opts);
+
+                    case 15:
                     case 'end':
                         return _context.stop();
                 }
@@ -152,7 +158,7 @@ var set = exports.set = function () {
                         opts = void 0;
 
                         if (!exit) {
-                            _context3.next = 18;
+                            _context3.next = 20;
                             break;
                         }
 
@@ -182,16 +188,16 @@ var set = exports.set = function () {
                         return _context3.abrupt('return');
 
                     case 15:
-                        Object.assign(opts, (0, _defineProperty3.default)({}, key, value));
-                        _context3.next = 19;
-                        break;
+                        researchJson('set', key, value)(opts);
+                        _context3.next = 18;
+                        return writeFile(_constants.RC, JSON.stringify(opts, undefined, '\t'));
 
                     case 18:
-                        opts = Object.assign(DEFAULTS, (0, _defineProperty3.default)({}, key, value));
-
-                    case 19:
                         _context3.next = 21;
-                        return writeFile(_constants.RC, JSON.stringify(opts, undefined, '\t'));
+                        break;
+
+                    case 20:
+                        console.log(_chalk2.default.bold.red('该目录下没有package.json文件'));
 
                     case 21:
                     case 'end':
@@ -250,8 +256,49 @@ var remove = exports.remove = function () {
 
 function ReadFile(file) {
     return new Promise(function (res, rej) {
-        readFile(file, 'utf8', function (err, data) {
+        _fs2.default.readFile(file, 'utf8', function (err, data) {
             if (err) rej(new Error('读取文件出错'));else res(JSON.parse(data));
         });
     });
+}
+
+function researchJson(type, key, value) {
+    var res = void 0;
+    return function DFS(json) {
+        Object.keys(json).some(function (prop) {
+            console.log(prop);
+            var dataType = (0, _typeof3.default)(json[prop]);
+            if (dataType === 'object') {
+                if (type === 'get' && prop === key) {
+                    return res = json[prop];
+                } else return DFS(json[prop]);
+            } else {
+                if (prop === key) {
+                    if (type === 'get') res = json[prop];else json[prop] = value;
+                    return res || (res = true);
+                }
+            }
+        });
+        return res;
+    };
+}
+
+// 数组扁平化
+function flut() {
+    var newArr = [];
+    return function DFS(arr) {
+        arr.forEach(function (val) {
+            // 只需要铺平数组即可
+            if (Object.prototype.toString.call(val) === "[object Array]") DFS(val);else newArr.push(val);
+        });
+        return newArr;
+    };
+}
+
+// 柯里化
+//add(a, b) => add()()
+function add(a) {
+    return function (b) {
+        return a + b;
+    };
 }

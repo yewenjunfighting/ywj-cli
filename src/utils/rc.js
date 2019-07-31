@@ -1,9 +1,8 @@
 // ywjrc文件的增删改查
 import { RC } from './constants';
-import { decode, encode } from 'ini';
 import { promisify } from 'util'; // util是node的一个模块
 import chalk from 'chalk';
-import fs, { createWriteStream } from 'fs';
+import fs from 'fs';
 
 // promisify返回一个返回值是promise版本的函数
 // promisify会在所有情况下假定original是一个最后的参数是回调函数的函数
@@ -22,20 +21,24 @@ export const get = async(key) => {
     if(exit) {
        // console.log(`RC: ${RC}`);
         let opts = await ReadFile(RC);
+        let res = researchJson('get', key, undefined)(opts);
+        // 如果是对象的话转化为字符序列后输出
+        if(typeof res === 'object') res = JSON.stringify(res, undefined, '\t');
         // console.log(opts instanceof Error);
-        return opts[key];
+        console.log(chalk.bold.green(res));
         // 这个要该,写个遍历的算法
     }else console.log(chalk.bold.red('该目录下没有package.json文件'));
     return opts;
 }
 
 export const getAll = async() => {
-    const exit = await exits(RC);
+    const exit =  await exits(RC);
     // RC: C:\Users\17289/.ywjrc; exit: false
     // console.log(`RC: ${RC}; exit: ${exit}`);
     let opts;
     if(exit) {
-        opts = await readFile(RC, 'utf8');
+        opts =  await readFile(RC, 'utf8');
+        // console.log(opts);
         // opts = decode(opts);
         // console.log(opts);
         return opts;
@@ -57,11 +60,11 @@ export const set = async(key, value) => {
             console.log(chalk.red(chalk.bold('Error:')), chalk.red('value is required'));
             return ;
         }
-        Object.assign(opts, { [key]: value });
+        researchJson('set', key, value)(opts);
+        await writeFile(RC, JSON.stringify(opts, undefined, '\t'));
     } else {
-        opts = Object.assign(DEFAULTS, { [key]: value });
+        console.log(chalk.bold.red('该目录下没有package.json文件'));
     }
-    await writeFile(RC, JSON.stringify(opts, undefined, '\t'));
 }
 
 export const remove = async(key) => {
@@ -77,9 +80,52 @@ export const remove = async(key) => {
 
 function ReadFile(file) {
     return new Promise((res,rej)=> {
-        readFile(file, 'utf8', (err, data)=> {
+        fs.readFile(file, 'utf8', (err, data)=> {
             if(err) rej(new Error('读取文件出错'));
             else res(JSON.parse(data));
         })
     })
+}
+
+function researchJson(type, key, value) {
+    let res = void 0;
+    return function DFS(json) {
+        Object.keys(json).some((prop)=> {
+            console.log(prop);
+            let dataType = typeof json[prop];
+            if(dataType === 'object') {
+                if(type === 'get' && prop === key) {
+                   return res = json[prop];
+                }else return DFS(json[prop]);
+            }else {
+                if(prop === key) {
+                    if(type === 'get') res = json[prop];
+                    else json[prop] = value;
+                    return res || (res = true);
+                }
+            }
+        })
+        return res;
+    };
+}
+
+// 数组扁平化
+function flut() {
+    let newArr = [];
+    return function DFS(arr) {
+        arr.forEach((val)=> {
+            // 只需要铺平数组即可
+            if(Object.prototype.toString.call(val) === "[object Array]") DFS(val);
+            else newArr.push(val);
+        });
+        return newArr;
+    }
+}
+
+// 柯里化
+//add(a, b) => add()()
+function add(a) {
+    return function(b) {
+        return a + b;
+    }
 }

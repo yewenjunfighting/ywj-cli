@@ -10,8 +10,14 @@ var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var _rc = require('./utils/rc');
 
+var _chalk = require('chalk');
+
+var _chalk2 = _interopRequireDefault(_chalk);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// 管理 .eosrc文件 
+// 命令格式: ywj config set k v
 var config = function () {
     var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(action, key, value) {
         var result, obj;
@@ -63,6 +69,9 @@ var config = function () {
                         return _context.abrupt('break', 20);
 
                     case 20:
+                        if (!action) console.log(_chalk2.default.bold.red('输入ywj -h查看config命令用法'));
+
+                    case 21:
                     case 'end':
                         return _context.stop();
                 }
@@ -73,8 +82,6 @@ var config = function () {
     return function config(_x, _x2, _x3) {
         return _ref.apply(this, arguments);
     };
-}(); // 管理 .eosrc文件 
-// 命令格式: ywj config set k v
-
+}();
 
 module.exports = config;

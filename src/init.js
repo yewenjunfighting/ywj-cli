@@ -49,7 +49,7 @@ let init = async(projectName) => {
             loading.start();
             // console.log(templateName, projectName);
             // 如果用户没有输入项目名字的话 ,就采用默认的名称
-            downloadLocal(answer, projectName = 'myProject').then(() => {
+            downloadLocal(answer, projectName = 'myproject').then(() => {
                 // 模板下载成功
                 loading.succeed();
                 const fileName = `${projectName}/package.json`;
