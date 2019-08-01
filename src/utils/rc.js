@@ -3,6 +3,7 @@ import { RC } from './constants';
 import { promisify } from 'util'; // util是node的一个模块
 import chalk from 'chalk';
 import fs from 'fs';
+import ora from 'ora';
 
 // promisify返回一个返回值是promise版本的函数
 // promisify会在所有情况下假定original是一个最后的参数是回调函数的函数
@@ -15,6 +16,8 @@ const writeFile = promisify(fs.writeFile);
 // DEFAULTS是默认配置
 export const get = async(key) => {
     // console.log(`key: ${key}`);
+    let geting = ora(`正在获取${key}的值`);
+    geting.start();
     const exit = await exits (RC);
     // console.log(`exit: ${exit}`);
     let opts = '';
@@ -22,59 +25,71 @@ export const get = async(key) => {
        // console.log(`RC: ${RC}`);
         let opts = await ReadFile(RC);
         let res = researchJson('get', key, undefined)(opts);
-        // 如果是对象的话转化为字符序列后输出
-        if(typeof res === 'object') res = JSON.stringify(res, undefined, '\t');
-        // console.log(opts instanceof Error);
-        console.log(chalk.bold.green(res));
-        // 这个要该,写个遍历的算法
-    }else console.log(chalk.bold.red('该目录下没有package.json文件'));
+        if(res) {
+            geting.succeed("get it");
+            if(typeof res === 'object') res = JSON.stringify(res, undefined, '\t');
+            console.log(chalk.bold.green(res));
+        }else geting.fail(`没有${key}字段`);
+    }else geting.fail('该目录下没有package.json文件');
     return opts;
 }
 
 export const getAll = async() => {
     const exit =  await exits(RC);
-    // RC: C:\Users\17289/.ywjrc; exit: false
-    // console.log(`RC: ${RC}; exit: ${exit}`);
+    let getAll = ora('正在获取数据...');
+    getAll.start();
     let opts;
     if(exit) {
         opts =  await readFile(RC, 'utf8');
         // console.log(opts);
         // opts = decode(opts);
         // console.log(opts);
+        getAll.succeed("get All");
         return opts;
+    }else {
+        getAll.fail('该目录下没有package.json文件');
     }
-    return {};
 }
 
 export const set = async(key, value) => {
+    let seting = ora(`正在设置${key}的值`);
+    seting.start();
     const exit = await exits(RC);
     let opts;
     if(exit) {
         opts = await readFile(RC, 'utf8');
         opts = JSON.parse(opts);
         if(!key) {
-            console.log(chalk.red(chalk.bold('Error:')), chalk.red('key is required'));
+            seting.fail('key is required');
             return ;
         }
         if(!value) {
-            console.log(chalk.red(chalk.bold('Error:')), chalk.red('value is required'));
+            seting.fail('value is required')
             return ;
         }
-        researchJson('set', key, value)(opts);
+        let res = researchJson('set', key, value)(opts);
+        if(res) seting.succeed('设置成功');
+        else seting.fail('设置失败: package.json中没有该字段,或者该字段为对象或数组');
         await writeFile(RC, JSON.stringify(opts, undefined, '\t'));
     } else {
-        console.log(chalk.bold.red('该目录下没有package.json文件'));
+        seting.fail('该目录下没有package.json文件');
     }
 }
 
 export const remove = async(key) => {
     const exit = await exits(RC);
+    let removing = ora('正在删除${key}字段...');
+    removing.start();
     let opts;
     if(exit) {
         opts = await ReadFile(RC);
-        if(opts[key]) delete opts[key];
-        else console.log(chalk.bold.red(`package.json文件没有${key}属性`));
+        let res = researchJson('remove', key, undefined)(opts);
+        if(res && res.valueOf() === true) {
+            removing.succeed('删除成功');
+        }else removing.fail('删除失败');
         await writeFile(RC, JSON.stringify(opts, undefined, '\t'), 'utf8');
+    }else {
+        removing.fail('该目录下没有package.json文件');
     }
 }
 
@@ -91,7 +106,7 @@ function researchJson(type, key, value) {
     let res = void 0;
     return function DFS(json) {
         Object.keys(json).some((prop)=> {
-            console.log(prop);
+            // console.log(prop);
             let dataType = typeof json[prop];
             if(dataType === 'object') {
                 if(type === 'get' && prop === key) {
@@ -100,6 +115,7 @@ function researchJson(type, key, value) {
             }else {
                 if(prop === key) {
                     if(type === 'get') res = json[prop];
+                    else if(type === 'remove') res = new Boolean(delete json[prop]);
                     else json[prop] = value;
                     return res || (res = true);
                 }
@@ -107,25 +123,4 @@ function researchJson(type, key, value) {
         })
         return res;
     };
-}
-
-// 数组扁平化
-function flut() {
-    let newArr = [];
-    return function DFS(arr) {
-        arr.forEach((val)=> {
-            // 只需要铺平数组即可
-            if(Object.prototype.toString.call(val) === "[object Array]") DFS(val);
-            else newArr.push(val);
-        });
-        return newArr;
-    }
-}
-
-// 柯里化
-//add(a, b) => add()()
-function add(a) {
-    return function(b) {
-        return a + b;
-    }
 }

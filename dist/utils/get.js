@@ -13,8 +13,6 @@ var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var _rc = require('./rc');
-
 var _downloadGitRepo = require('download-git-repo');
 
 var _downloadGitRepo2 = _interopRequireDefault(_downloadGitRepo);
@@ -25,17 +23,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var downloadLocal = exports.downloadLocal = function () {
     var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(template, projectName) {
-        var config, api;
+        var api;
         return _regenerator2.default.wrap(function _callee$(_context) {
             while (1) {
                 switch (_context.prev = _context.next) {
                     case 0:
-                        _context.next = 2;
-                        return (0, _rc.getAll)();
-
-                    case 2:
-                        config = _context.sent;
-
+                        // console.log(`templateName: ${templateName}; projectName: ${projectName}`);
+                        // let config = await getAll();
                         // config => {}
                         // let api = `${config.registry}/${templateName}`;
                         // 这里我把项目模板硬编码了, 这里后续要改的
@@ -51,7 +45,7 @@ var downloadLocal = exports.downloadLocal = function () {
                             });
                         }));
 
-                    case 5:
+                    case 2:
                     case 'end':
                         return _context.stop();
                 }

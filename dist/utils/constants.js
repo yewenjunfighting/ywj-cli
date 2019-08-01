@@ -28,12 +28,12 @@ var TEMPLATE = exports.TEMPLATE = {
         projectName: 'VueProject'
     },
     'react-web': {
-        user: 'lpz1096',
-        projectName: 'vueProMobileTemplate'
-    },
-    'vue-mobile': {
         user: 'lidaguang1989',
         projectName: 'react-seed'
+    },
+    'vue-mobile': {
+        user: 'lpz1096',
+        projectName: 'vueProMobileTemplate'
     },
     'react-mobile': {
         user: 'slashhuang',

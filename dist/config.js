@@ -41,7 +41,7 @@ var config = function () {
                     case 6:
                         result = _context.sent;
 
-                        console.log(result);
+                        if (result) console.log(result);
                         _context.next = 14;
                         break;
 
@@ -52,7 +52,7 @@ var config = function () {
                     case 12:
                         obj = _context.sent;
 
-                        console.log(obj);
+                        if (obj) console.log(obj);
 
                     case 14:
                         return _context.abrupt('break', 20);

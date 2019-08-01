@@ -8,10 +8,10 @@ let config = async(action, key, value) => {
         case 'get':
             if(key) {
                 let result = await get(key);
-                console.log(result);
+                if(result) console.log(result);
             } else {
                 let obj = await getAll();
-                console.log(obj);
+                if(obj) console.log(obj);
             }
             break;
         case 'set':
